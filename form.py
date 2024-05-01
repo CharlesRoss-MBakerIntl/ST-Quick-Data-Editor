@@ -178,7 +178,7 @@ def edit_form(project, coordinates, project_name, token):
 
         proj_web = st.text_input("Project Website", key = 'proj_web', value = project['Proj_Web'].iloc[0])
         
-        apex_link = st.text_input("APEX Mapper Link", key = 'apex_link', value = '')
+        apex_link = st.text_input("APEX Mapper Link", key = 'apex_link', value = project['APEX_Mapper_Link'].iloc[0])
 
         st.write("#")
 
