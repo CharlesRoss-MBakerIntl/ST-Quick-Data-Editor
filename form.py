@@ -193,15 +193,15 @@ def edit_form(project, coordinates, project_name, token):
 
         proj_web = st.text_input("Project Website", key = 'proj_web', value = project['Proj_Web'].iloc[0])
         
-        apex_link = st.text_input("APEX Mapper Link", key = 'apex_link', value = project['APEX_Mapper_Link'].iloc[0])
+        apex_link = st.text_input("APEX Mapper Link", key = 'apex_link', value = '')
 
 
 
         #Create Dicitionary from All Fields
         package = {
                     "OBJECTID": project['OBJECTID'].iloc[0],
-                    'Public_Proj_Name': public_name,
-                    "Proj_Name": tech_name,
+                    #'Public_Proj_Name': public_name,
+                    #"Proj_Name": tech_name,
                     "IRIS":iris,
                     "Fed_Proj_Num":fed_num,
                     "STIP":stip,
