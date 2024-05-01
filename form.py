@@ -220,8 +220,7 @@ def edit_form(project, coordinates, project_name, token):
                     "Fund_Type":fund_type,
                     "New_Continuing":new_continue,
                     "APEX_Mapper_Link":apex_link,
-                    "Scale": scale,
-
+                    #"Scale": scale,
                     }
 
 

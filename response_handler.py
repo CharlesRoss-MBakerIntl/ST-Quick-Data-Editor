@@ -6,6 +6,20 @@ from data import Sources
 
 
 def chunk_dictionary(package, objectid, num_chunks):
+
+    #Filter Package for \xao values
+    for key, value in package.items():
+        
+        # Check if the value is a string
+        if isinstance(value, str):
+            
+            # If the value contains '\xa0', strip it away
+            if '\xa0' in value:
+                package[key] = value.replace('\xa0', '').strip()
+            
+            # If the value only contains '\xa0', remove the entry entirely
+            elif value.strip() == '\xa0':
+                del package[key]
     
     # Calculate the size of each chunk
     chunk_size = len(package) // num_chunks
@@ -114,6 +128,7 @@ def submit_updates(chunks, token):
                         #Response did not contain a JSON item, report error        
                         except:
                             error += 1
+                            st.write(response.content)
                             message = f"Error Updating {service}: Response Did Not Return JSON Package"
             
                     #Connection to AGOL failed, report error
@@ -130,7 +145,7 @@ def submit_updates(chunks, token):
 
         #Display message from catches
         if error == len(chunks):
-            st.error(f"Error Updating {service}: {message}")
+            st.error( f"{message}")
 
         elif error != len(chunks) and success >= 1:
             st.success(f"{service} Updated")      
