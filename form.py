@@ -182,13 +182,9 @@ def edit_form(project, coordinates, project_name, token):
 
         st.write("#")
 
-        # Tenth Row Project Engineer
-        col25, col26 = st.columns(2)
         
-        with col25:
-            scale_map_series = st.number_input("Scale Map Series", key = 'scale_map', value = project['Scale_Map_Series'].iloc[0])
-        with col26:
-            scale = st.number_input("Scale", key = 'scale', value = project['Scale'].iloc[0])
+    
+        scale = st.number_input("Scale", key = 'scale', value = project['Scale'].iloc[0])
 
 
 
@@ -224,7 +220,6 @@ def edit_form(project, coordinates, project_name, token):
                     "Fund_Type":fund_type,
                     "New_Continuing":new_continue,
                     "APEX_Mapper_Link":apex_link,
-                    "Scale_Map_Series": scale_map_series,
                     "Scale": scale,
 
                     }
