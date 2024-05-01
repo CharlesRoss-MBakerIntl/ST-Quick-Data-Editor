@@ -1,24 +1,50 @@
 import requests
+import json
 import streamlit as st
 
 from data import Sources
 
 
-def filter_package(package):
+def chunk_dictionary(package, objectid, num_chunks):
     
-    filtered_package = []
+    # Calculate the size of each chunk
+    chunk_size = len(package) // num_chunks
+    remainder = len(package) % num_chunks
 
-    for item in package:
-        cleaned_attributes = {key.strip(): value.strip() for key, value in item['attributes'].items() if value.strip() != '\xa0'}
-        cleaned_item_package.append({'attributes': cleaned_attributes})
+    # Initialize the list to store chunks
+    chunks = []
+    start_index = 0
 
-    return filtered_package
+    # Loop through the dictionary keys and create chunks
+    for i in range(num_chunks):
+        
+        # Calculate the end index for the current chunk
+        end_index = start_index + chunk_size + (1 if i < remainder else 0)
+        
+        # Extract keys for the current chunk
+        chunk_keys = list(package.keys())[start_index:end_index]
+        
+        # Create a new chunk dictionary
+        chunk = {key: package[key] for key in chunk_keys}
+
+        # Add ObjectID to chunk
+        chunk['OBJECTID'] = objectid
+        
+        # Add the chunk to the list
+        chunks.append(chunk)
+        
+        # Update the start index for the next chunk
+        start_index = end_index
+
+
+    return chunks
+
+    
 
 
 
 
-
-def submit_updates(package, token):
+def submit_updates(chunks, token):
 
     #Create Dict
     update_list = {
@@ -34,52 +60,80 @@ def submit_updates(package, token):
         #Set Update URL
         url = f"{service_url}/0/applyEdits"
 
-        #Set Update Params
-        params = {
-            'f':'json',
-            'token':token,
-            'updates':f'{package}'
-        }
+        #Create Error Catch
+        success = 0
+        error = 0
+        message = ""
 
-        #Send Update Request
-        try:
-            response = requests.post(url, params=params)
+        #Update Chunks of Data
+        for chunk in chunks:
 
-            #If Connection Successful
-            if response.status_code == 200:
-            
-                #Grab Result from Response
+            if len(chunk) != 0:
+
+                payload = [{'attributes':chunk}]
+
+                #Set Update Params
+                params = {
+                    'f':'json',
+                    'token':token,
+                    'updates':f'{payload}'
+                }
+
+                
+
+                #Send Update Request
                 try:
-                    result = response.json()
 
-                    #Check if Update Results in results and if success in content
-                    if 'updateResults' in result and 'success' in result['updateResults'][0]:
+                    response = requests.post(url, params=params)
 
-                            #Update Successful
-                            if result['updateResults'][0]['success'] == True:
-                                st.success(f"{service} Updated")
-                            
-                            #If Success was a failure, report the error
-                            elif result['updateResults'][0]['success'] == False:
-                                st.error(f"Error Updating {service}: Failed to Connect")
-
+                    #If Connection Successful
+                    if response.status_code == 200:
                     
-                    #If Update Results or Success Not in Results Package
-                    else:
-                        st.error(f"Error Updating {service}: Success Not in Results Package")
+                        #Grab Result from Response
+                        try:
+                            result = response.json()
 
-                #Response did not contain a JSON item, report error        
-                except:
-                    st.error(f"Error Updating {service}: Response Did Not Return JSON Package")
-                    st.error(response.content)
+                            #Check if Update Results in results and if success in content
+                            if 'updateResults' in result and 'success' in result['updateResults'][0]:
 
-            #Connection to AGOL failed, report error
-            else:
-                st.error(f"Error Updating {service}: Request Did Not Connect to AGOL")
-                st.write(response.content)
+                                    #Update Successful
+                                    if result['updateResults'][0]['success'] == True:
+                                        success += 1
+                                    
+                                    #If Success was a failure, report the error
+                                    elif result['updateResults'][0]['success'] == False:
+                                        error += 1
+                                        message = f"Error Updating {service}: Failed to Connect"
+
+                            
+                            #If Update Results or Success Not in Results Package
+                            else:
+                                error += 1
+                                message = f"Error Updating {service}: Success Not in Results Package"
+
+                        #Response did not contain a JSON item, report error        
+                        except:
+                            error += 1
+                            message = f"Error Updating {service}: Response Did Not Return JSON Package"
             
-        except Exception as e:
-            st.error(f"Error Updating {service} <br> {e}")
+                    #Connection to AGOL failed, report error
+                    else:
+                        error += 1
+                        message = f"Error Updating {service}: Request Did Not Connect to AGOL"
+    
+                    
+                except Exception as e:
+                    error += 1
+                    message = f"Error Updating {service} <br> {e}"
+
+
+
+        #Display message from catches
+        if error == len(chunks):
+            st.error(f"Error Updating {service}: {message}")
+
+        elif error != len(chunks) and success >= 1:
+            st.success(f"{service} Updated")      
 
 
         

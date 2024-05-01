@@ -9,8 +9,7 @@ from agol_restapi import agol_table_to_pd
 from agol_restapi import pull_coordinates
 
 from response_handler import submit_updates
-from response_handler import filter_package
-
+from response_handler import chunk_dictionary
 from data import Sources
 
 
@@ -112,20 +111,6 @@ def edit_form(project, coordinates, project_name, token):
 
         st.write("#")
 
-        #Fifth Section
-        col10, col11 = st.columns(2)
-        with col10:
-            bor_cen = st.text_input("Borough/Census Area", key = 'borough_census', value = project['Borough_Census'].iloc[0])
-        with col11:
-            reg = st.text_input("DOT&PF Region", key = 'dot_pf_region', value = project['DOT_PF_Region'].iloc[0])
-
-        #Sixth Section
-        col12, col13 = st.columns(2)
-        with col12:
-            senate = st.text_input("State Senate", key = 'state_senate', value = project['State_Senate'].iloc[0])
-        with col13:
-            house = st.text_input("State_House", key = 'state_hosue', value = project['State_House'].iloc[0])
-
         #Eigth Section
         impact_comm = st.text_input("Impacted Communities", key = 'impacted_communities', value = project['Impacted_Communities'].iloc[0])
 
@@ -195,20 +180,25 @@ def edit_form(project, coordinates, project_name, token):
         
         apex_link = st.text_input("APEX Mapper Link", key = 'apex_link', value = '')
 
+        st.write("#")
+
+        # Tenth Row Project Engineer
+        col25, col26 = st.columns(2)
+        
+        with col25:
+            scale_map_series = st.number_input("Scale Map Series", key = 'scale_map', value = project['Scale_Map_Series'].iloc[0])
+        with col26:
+            scale = st.number_input("Scale", key = 'scale', value = project['Scale'].iloc[0])
+
 
 
         #Create Dicitionary from All Fields
         package = {
-                    "OBJECTID": project['OBJECTID'].iloc[0],
-                    #'Public_Proj_Name': public_name,
-                    #"Proj_Name": tech_name,
+                    'Public_Proj_Name': public_name,
+                    "Proj_Name": tech_name,
                     "IRIS":iris,
                     "Fed_Proj_Num":fed_num,
                     "STIP":stip,
-                    "Borough_Census":bor_cen,
-                    "DOT_PF_Region":reg,
-                    "State_Senate":senate,
-                    "State_House":house,
                     "Route_ID": route_id,
                     "Route_Name": route_name,
                     "Impacted_Communities":impact_comm,
@@ -233,27 +223,17 @@ def edit_form(project, coordinates, project_name, token):
                     "Proj_Practice":proj_prac,
                     "Fund_Type":fund_type,
                     "New_Continuing":new_continue,
-                    "APEX_Mapper_Link":apex_link
+                    "APEX_Mapper_Link":apex_link,
+                    "Scale_Map_Series": scale_map_series,
+                    "Scale": scale,
+
                     }
 
-        #Filter Package for \xao values
-        for key, value in package.items():
-            
-            # Check if the value is a string
-            if isinstance(value, str):
-                
-                # If the value contains '\xa0', strip it away
-                if '\xa0' in value:
-                    package[key] = value.replace('\xa0', '').strip()
-                
-                
-                # If the value only contains '\xa0', remove the entry entirely
-                elif value.strip() == '\xa0':
-                    del package[key]
+
+        #Chunk Packaged Data for Download
+        chunks = chunk_dictionary(package, project['OBJECTID'].iloc[0], 3)
 
 
-        payload = [{'attributes':package}]
-        
         st.write("")
         st.write("")
 
@@ -262,7 +242,7 @@ def edit_form(project, coordinates, project_name, token):
 
 
     if submit_button:
-
-        submit_updates(payload, token)
+        pass
+        submit_updates(chunks, token)
 
         
