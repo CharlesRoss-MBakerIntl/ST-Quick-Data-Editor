@@ -192,6 +192,8 @@ def edit_form(project, coordinates, project_name, token):
         proj_impact = st.text_area("Curent Project Impact", height=200, max_chars=5000, value = project['Proj_Impact'].iloc[0])
 
         proj_web = st.text_input("Project Website", key = 'proj_web', value = project['Proj_Web'].iloc[0])
+        
+        apex_link = st.text_input("APEX Mapper Link", key = 'apex_link', value = project['APEX_Mapper_Link'].iloc[0])
 
 
 
@@ -230,7 +232,8 @@ def edit_form(project, coordinates, project_name, token):
                     "Anticipated_End":antic_end,
                     "Proj_Practice":proj_prac,
                     "Fund_Type":fund_type,
-                    "New_Continuing":new_continue
+                    "New_Continuing":new_continue,
+                    "APEX_Mapper_Link":apex_link
                     }
 
         #Filter Package for \xao values
@@ -246,7 +249,7 @@ def edit_form(project, coordinates, project_name, token):
                 
                 # If the value only contains '\xa0', remove the entry entirely
                 elif value.strip() == '\xa0':
-                    del pacakge[key]
+                    del package[key]
 
 
         payload = [{'attributes':package}]
