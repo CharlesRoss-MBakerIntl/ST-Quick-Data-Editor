@@ -225,7 +225,7 @@ def edit_form(project, coordinates, project_name, token):
 
 
         #Chunk Packaged Data for Download
-        chunks = chunk_dictionary(package, project['OBJECTID'].iloc[0], 3)
+        chunks = chunk_dictionary(package, 3)
 
 
         st.write("")
@@ -237,6 +237,6 @@ def edit_form(project, coordinates, project_name, token):
 
     if submit_button:
         pass
-        submit_updates(chunks, token)
+        submit_updates(chunks, project['UID'].iloc[0], token)
 
         

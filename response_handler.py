@@ -4,8 +4,10 @@ import streamlit as st
 
 from data import Sources
 
+from agol_restapi import pull_objectid
 
-def chunk_dictionary(package, objectid, num_chunks):
+
+def chunk_dictionary(package, num_chunks):
 
     #Filter Package for \xao values
     for key, value in package.items():
@@ -40,9 +42,6 @@ def chunk_dictionary(package, objectid, num_chunks):
         
         # Create a new chunk dictionary
         chunk = {key: package[key] for key in chunk_keys}
-
-        # Add ObjectID to chunk
-        chunk['OBJECTID'] = objectid
         
         # Add the chunk to the list
         chunks.append(chunk)
@@ -58,7 +57,7 @@ def chunk_dictionary(package, objectid, num_chunks):
 
 
 
-def submit_updates(chunks, token):
+def submit_updates(chunks, uid, token):
 
     #Create Dict
     update_list = {
@@ -70,6 +69,9 @@ def submit_updates(chunks, token):
 
     #Cycle through All Services to Update
     for service, service_url in update_list.items():
+
+        #Grab OBJECTID using UID
+        objectid = pull_objectid(service_url, 0, uid, token)
         
         #Set Update URL
         url = f"{service_url}/0/applyEdits"
@@ -84,6 +86,10 @@ def submit_updates(chunks, token):
 
             if len(chunk) != 0:
 
+                #Add OBJECTID to Chunk
+                chunk['OBJECTID'] = objectid
+
+                #Create Upload Payload
                 payload = [{'attributes':chunk}]
 
                 #Set Update Params
