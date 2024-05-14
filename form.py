@@ -1,6 +1,9 @@
 import streamlit as st
 import leaflet
 import folium
+import time
+
+from streamlit_js_eval import streamlit_js_eval
 
 from streamlit_folium import st_folium
 from streamlit_folium import folium_static
@@ -60,11 +63,9 @@ def proj_map(coordinates, proj_name):
 
 def edit_form(project, coordinates, project_name, token):
 
-    #Create Empty Form
-    info_form = st.empty()
 
     #Create Form
-    with info_form.form("Edit Form"):
+    with st.form("Edit Form"):
 
         proj_map(coordinates, project_name)
     
@@ -220,7 +221,7 @@ def edit_form(project, coordinates, project_name, token):
                     "Fund_Type":fund_type,
                     "New_Continuing":new_continue,
                     "APEX_Mapper_Link":apex_link,
-                    #"Scale": scale,
+                    "Scale": scale,
                     }
 
 
@@ -239,4 +240,13 @@ def edit_form(project, coordinates, project_name, token):
         pass
         submit_updates(chunks, project['UID'].iloc[0], token)
 
+        st.write('#')
+        st.warning("RESETING FORM")
+
+        time.sleep(5)
+
+        st.session_state['project'] == None
+        st.session_state['coordinates'] == None
+
+        streamlit_js_eval(js_expressions="parent.window.location.reload()")
         

@@ -2,3 +2,4 @@ folium
 leaflet
 streamlit_folium
 openpyxl
+streamlit_js_eval

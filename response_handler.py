@@ -154,7 +154,7 @@ def submit_updates(chunks, uid, token):
             st.error( f"{message}")
 
         elif error != len(chunks) and success >= 1:
-            st.success(f"{service} Updated")      
+            st.success(f"{service} Updated")    
 
 
         
