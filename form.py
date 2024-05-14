@@ -237,16 +237,13 @@ def edit_form(project, coordinates, project_name, token):
 
 
     if submit_button:
-        pass
+        
         submit_updates(chunks, project['UID'].iloc[0], token)
 
         st.write('#')
         st.warning("RESETING FORM")
 
         time.sleep(5)
-
-        st.session_state['project'] == None
-        st.session_state['coordinates'] == None
 
         streamlit_js_eval(js_expressions="parent.window.location.reload()")
         
