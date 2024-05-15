@@ -24,3 +24,5 @@ if sel_project == True:
     
     #Display Project Edit Form
     edit_form(project, coordinates, project['Public_Proj_Name'].iloc[0], token)
+
+    

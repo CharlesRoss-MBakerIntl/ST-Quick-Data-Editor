@@ -184,10 +184,12 @@ def edit_form(project, coordinates, project_name, token):
         st.write("#")
 
         
-    
-        scale = st.number_input("Scale", key = 'scale', value = project['Scale'].iloc[0])
+        if project['Scale'].iloc[0] == '':
+            scale = st.number_input("Scale", key = 'scale', value = 0)
+        else:
+            scale = st.number_input("Scale", key ='scale', value = project['Scale'].iloc[0])
 
-
+        
 
         #Create Dicitionary from All Fields
         package = {
@@ -223,6 +225,11 @@ def edit_form(project, coordinates, project_name, token):
                     "APEX_Mapper_Link":apex_link,
                     "Scale": scale,
                     }
+        
+
+        #Control Scale
+        if scale == 0:
+            package['Scale'] = ''
 
 
         #Chunk Packaged Data for Download
