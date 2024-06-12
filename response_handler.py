@@ -104,7 +104,7 @@ def submit_updates(chunks, uid, token):
                 #Send Update Request
                 try:
 
-                    response = requests.post(url, params=params)
+                    response = requests.post(url, params)
 
                     #If Connection Successful
                     if response.status_code == 200:
