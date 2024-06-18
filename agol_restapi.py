@@ -29,8 +29,8 @@ def token_generation(username, password):
     #Send Response to Generate Token
     response = requests.post(url, params=params, data=data)
 
-    print(response)
-    print(response.json())
+    st.write(response)
+    st.write(response.json())
 
     #Save Token
     try:

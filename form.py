@@ -21,11 +21,11 @@ def project_select(token):
     
     data = Sources().polygons
 
-    print(data)
+    st.write(data)
 
     df = agol_table_to_pd(data, 0, token)
 
-    print(df)
+    st.write(df)
 
     # selection = st.selectbox("Select a Project", df["Public_Proj_Name"], index = None)
 
