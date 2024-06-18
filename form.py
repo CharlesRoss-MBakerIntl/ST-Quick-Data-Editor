@@ -22,7 +22,7 @@ def project_select(token):
     data = Sources().polygons
     df = agol_table_to_pd(data, 0, token)
 
-    selection = st.selectbox("Select a Project", df["Public_Proj_Name"], index = None, placeholder = "Select your project from the dropdown list")
+    selection = st.selectbox("Select a Project", df["Public_Proj_Name"], index = None)
 
     if selection != None:
 
