@@ -8,6 +8,8 @@ from agol_restapi import token_generation
 
 token = token_generation("AKDOT_APEX", "@KD0T_@p3x")
 
+print(token)
+
 st.session_state['project'] = None
 
 #Select Project

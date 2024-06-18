@@ -20,7 +20,12 @@ from data import Sources
 def project_select(token):
     
     data = Sources().polygons
+
+    print(data)
+
     df = agol_table_to_pd(data, 0, token)
+
+    print(df)
 
     selection = st.selectbox("Select a Project", df["Public_Proj_Name"], index = None)
 
