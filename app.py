@@ -16,15 +16,15 @@ st.session_state['project'] = None
 sel_project = project_select(token)
 
 
-if sel_project == True:
+# if sel_project == True:
     
-    #Pull Project Name
-    project = st.session_state['project']
+#     #Pull Project Name
+#     project = st.session_state['project']
 
-    #Pull Project Coordinates
-    coordinates = st.session_state['coordinates']
+#     #Pull Project Coordinates
+#     coordinates = st.session_state['coordinates']
     
-    #Display Project Edit Form
-    edit_form(project, coordinates, project['Public_Proj_Name'].iloc[0], token)
+#     #Display Project Edit Form
+#     edit_form(project, coordinates, project['Public_Proj_Name'].iloc[0], token)
 
     
