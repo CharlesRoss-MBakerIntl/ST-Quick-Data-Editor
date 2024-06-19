@@ -27,7 +27,7 @@ def project_select(token):
 
     st.write(df)
 
-    # selection = st.selectbox("Select a Project", df["Public_Proj_Name"], index = None)
+    selection = st.selectbox("Select a Project", df["Public_Proj_Name"])
 
     # if selection != None:
 
