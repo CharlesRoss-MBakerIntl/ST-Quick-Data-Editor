@@ -24,13 +24,12 @@ def project_select(token):
     df = agol_table_to_pd(data, 0, token)
 
     project_list  = ['']
-
     project_list.append(df["Public_Proj_Name"])
 
 
     selection = st.selectbox("Select a Project", project_list)
 
-    if selection != None:
+    if selection != '':
 
         # Select the Project Row from the DataFrame and Store Project in Session State
         project = df[df['Public_Proj_Name'] == selection]
