@@ -21,36 +21,33 @@ def project_select(token):
     
     data = Sources().polygons
 
-    st.write(data)
-
     df = agol_table_to_pd(data, 0, token)
 
-    st.write(df)
 
     selection = st.selectbox("Select a Project", df["Public_Proj_Name"])
 
-    # if selection != None:
+    if selection != None:
 
-    #     # Select the Project Row from the DataFrame and Store Project in Session State
-    #     project = df[df['Public_Proj_Name'] == selection]
-    #     st.session_state['project'] = project
-
-
-    #     # Save UID for Project and Store in Session State
-    #     uid = project['UID'].iloc[0]
-    #     st.session_state['uid'] = uid
+        # Select the Project Row from the DataFrame and Store Project in Session State
+        project = df[df['Public_Proj_Name'] == selection]
+        st.session_state['project'] = project
 
 
-    #     # Save UID for Project and Store in Session State
-    #     objectid = project['OBJECTID'].iloc[0]
-    #     st.session_state['OBJECTID'] = uid
+        # Save UID for Project and Store in Session State
+        uid = project['UID'].iloc[0]
+        st.session_state['uid'] = uid
 
 
-    #     #Grab the Coordiantes for the Project Polygon and Store in Session State
-    #     coordinates = pull_coordinates(data, 0, token, uid, [])
-    #     st.session_state['coordinates'] = coordinates
+        # Save UID for Project and Store in Session State
+        objectid = project['OBJECTID'].iloc[0]
+        st.session_state['OBJECTID'] = uid
 
-    #     return True
+
+        #Grab the Coordiantes for the Project Polygon and Store in Session State
+        coordinates = pull_coordinates(data, 0, token, uid, [])
+        st.session_state['coordinates'] = coordinates
+
+        return True
 
 
 def proj_map(coordinates, proj_name):
