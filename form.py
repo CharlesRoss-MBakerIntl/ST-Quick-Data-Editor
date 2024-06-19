@@ -24,7 +24,7 @@ def project_select(token):
     df = agol_table_to_pd(data, 0, token)
 
     project_list  = ['']
-    project_list.append(df["Public_Proj_Name"])
+    project_list.append(list(df["Public_Proj_Name"]))
 
 
     selection = st.selectbox("Select a Project", project_list)
